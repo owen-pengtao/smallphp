@@ -61,7 +61,7 @@ class pagelist{
 
   function __construct($db){
     $page_size = intval($_GET['page_size']);
-    $this->page_size = $page_size ? $page_size : 20;
+    $this->page_size = $page_size ? $page_size : 10;
     $this->num_btn  = 9;
     $this->img_path  = URL_IMAGES;
     $this->img    = array("ico_first.gif", "ico_front.gif", "ico_next.gif", "ico_last.gif");
@@ -116,15 +116,16 @@ class pagelist{
       $this->_set_total_records();
     }
     $this->_set_show_page();
-    $str = '';
+    $str = '<nav>';
     if ($this->total_pages>1){
-      $str.= '<div class="pagination">';
+      $str.= '<ul class="pagination">';
       $str.= $this->_show_first_prv().$this->_show_num_btn().$this->_show_next_last();
       if (strstr($_SERVER['PHP_SELF'], '/root/')) {
         $str.= $this->_show_page_info();
       }
       //$str.= $this->_show_first_prv().$this->_show_num_btn().$this->_show_next_last().$this->_show_page_info().$this->_show_num_select().$this->_show_num_text();
-      $str.= '</div>';
+      $str.= '</ul>';
+      $str.= '</nav>';
     }
     return $str;
   }
@@ -137,10 +138,10 @@ class pagelist{
     $this->table["where"]  = "";
   }
   private function _set_img(){
-    $this->img_btn[0]  = "&lt;&lt;";
+    $this->img_btn[0]  = "«";
     $this->img_btn[1]  = "&lt;";
     $this->img_btn[2]  = "&gt;";
-    $this->img_btn[3]  = "&gt;&gt;";
+    $this->img_btn[3]  = "»";
   }
   private function _set_show_page(){
     $this->_set_img();    //设置翻页图片路径
@@ -159,8 +160,9 @@ class pagelist{
       $str = '';
       //$str = '<span>'.$this->img_btn[0].'</span> <span>'.$this->img_btn[1].'</span>';
     }else{
-      $str = "<span class='first'><a href='".$this->url."1"."' onfocus='this.blur()'>".$this->img_btn[0]."</a></span>  ";  //此处1为首页，page值为1
-      $str.= "<span class='prev'><a href='".$this->url.($this->page-1)."' onfocus='this.blur()'>".$this->img_btn[1]."</a></span> ";
+      //此处1为首页，page值为1
+      $str = "<li><a href='".$this->url."1"."' aria-label='Previous'><span aria-hidden='true'>".$this->img_btn[0]."</span></a></li>";
+      $str.= "<li><a href='".$this->url.($this->page-1)."' aria-label='Previous'><span aria-hidden='true'>".$this->img_btn[1]."</span></a></li>";
     }
     return $str;
   }
@@ -169,13 +171,13 @@ class pagelist{
       $str = '';
       //$str = '<span>'.$this->img_btn[2].'</span> <span>'.$this->img_btn[3]."</span>";
     }else{
-      $str = "<span class='next'><a href='".$this->url.($this->page+1)."' onfocus='this.blur()'>".$this->img_btn[2]."</a></span>  ";
-      $str.= "<span class='last'><a href='".$this->url.$this->total_pages."' onfocus='this.blur()'>".$this->img_btn[3]."</a></span> ";
+      $str = "<li><a href='".$this->url.($this->page+1)."' aria-label='Previous'><span aria-hidden='true'>".$this->img_btn[2]."</span></a></li>";
+      $str.= "<li><a href='".$this->url.$this->total_pages."' aria-label='Previous'><span aria-hidden='true'>".$this->img_btn[3]."</span></a></li>";
     }
     return $str;
   }
   private function _show_num_text(){
-    $str = " <strong>转到第</strong> <input id='go_num_text' type='text' value='".$this->page."' style='border:0;border-bottom:1px solid #CCC;text-align:center;width:30px;'/> <strong>页</strong> ";
+    $str = " <li><strong>转到第</strong> <input id='go_num_text' type='text' value='".$this->page."' style='border:0;border-bottom:1px solid #CCC;text-align:center;width:30px;'/> <strong>页</strong> </li>";
     $str.= "<a href='#' onClick=\"window.location='".$this->url."'+document.getElementById('go_num_text').value;\" class='go' onfocus='this.blur()'>[Go]</a>";
     return $str;
   }
@@ -215,15 +217,15 @@ class pagelist{
     $str = "";
     for ($i=$start_p; $i<=$end_p; $i++){
       if ($i==$this->page){
-        $str.= " <span class='this-page'><strong>".$i."</strong></span> ";
+        $str.= " <li class='active'><a href='javascript:void(0)'>".$i."</a></li>";
       }else{
-        $str.= " <span><a href='".$this->url.$i."' onfocus='this.blur()'>".$i."</a></span> ";
+        $str.= " <li><a href='".$this->url.$i."'>".$i."</a></li> ";
       }
     }
     return $str;
   }
   private function _show_page_info(){
-    $str = " <strong>共".$this->total_records."条/".$this->total_pages."页</strong>";
+    $str = " <li><a href='javascript:void(0)'>共".$this->total_records."条/".$this->total_pages."页</a></li>";
     return $str;
   }
   /**

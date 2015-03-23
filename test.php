@@ -1,7 +1,7 @@
 <?php
-  include("db_config.php");
-  include("config.php");
-  include("frame/class/db.php");
+include("db_config.php");
+include("config.php");
+include("frame/class/db.php");
   $db_config = new db_config();
   $db = new db();
   $db->connect($db_config->db_config);

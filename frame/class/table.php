@@ -24,7 +24,7 @@ class table{
   private $td_class;
   private $tr_th;
   function __construct(){
-    $this->tab_type  = array('97%', '#0099FF', 't_table', '', '');  //表格宽度，边框颜色，表格Class，id，style
+    $this->tab_type  = array('table', '', '');  //表格Class，id，style
 
     $this->is_mutil_select = true;
     $this->_n    = "\r\n";
@@ -63,7 +63,7 @@ class table{
    * @return array $tr_th 每列的标题
    * @author owen 2008-6-12
    */
-  function set_table($td_width, $td_class, $tr_th) {
+  function set_table($td_width, $tr_th=array(), $td_class=array()) {
     $this->td_width  = $td_width;
     $this->td_class  = $td_class;
     $this->tr_th  = $tr_th;
@@ -88,16 +88,14 @@ class table{
    * @author owen 2008-6-12
    */
   function table_start($arr_type=array(), $border=1){
-    $width    = $arr_type[0] ? $arr_type[0] : $this->tab_type[0];
-    $bordercolor= $arr_type[1] ? $arr_type[1] : $this->tab_type[1];
-    $class    = $arr_type[2] ? $arr_type[2].' '.$this->tab_type[2] : $this->tab_type[2];
-    $str_tmp = $arr_type[3] ? ' id="'.$arr_type[3].'"' : '';
-    $str_tmp.= $arr_type[4] ? ' style="'.$arr_type[3].'"' : '';
+    $class    = $arr_type[0] ? $arr_type[0].' '.$this->tab_type[0] : $this->tab_type[0];
+    $str_tmp = $arr_type[1] ? ' id="'.$arr_type[1].'"' : '';
+    $str_tmp.= $arr_type[2] ? ' style="'.$arr_type[2].'"' : '';
 
     if ($this->is_edit or $this->is_del or $this->is_select) {
       $str = $this->f->form_start($_SERVER['PHP_SELF'].'?a=index', array("form_class"));
     }
-    $str.= '<table width="'.$width.'" bordercolor="'.$bordercolor.'" class="'.$class.'" border="'.$border.'" align="center" cellpadding="0" cellspacing="0"'.$str_tmp.'>'.$this->_n;
+    $str.= '<table class="'.$class.'" '.$str_tmp.'>'.$this->_n;
     return $str;
   }
   /**
@@ -106,7 +104,8 @@ class table{
    * @author owen 2008-6-12
    */
   function table_end(){
-    $str = '</table>'.$this->_n;
+    $str = '</tbody>'.$this->_n;
+    $str.= '</table>'.$this->_n;
     if ($this->is_edit or $this->is_del or $this->is_select) {
       $str.= $this->f->form_end().$this->_n;
     }
@@ -120,7 +119,7 @@ class table{
    * @author owen 2008-6-12
    */
   function caption($caption='') {
-    $str = $caption ? '<caption>'.$caption.'</caption>'.$this->_n : '';
+    $str = $caption ? '  <caption>'.$caption.'</caption>'.$this->_n : '';
     return $str;
   }
   /**
@@ -131,12 +130,14 @@ class table{
    */
   function tr_th($arr_css=array()) {
     $this->_th_init($this->tr_th);
-    $str.= '<tr>'.$this->_n;
+    $str = '<thead>'.$this->_n;
+    $str.= '  <tr>'.$this->_n;
     foreach ((array)$this->tr_th as $k=>$v) {
-      $str.= '<th '.($arr_css[$k] ? 'class="'.$arr_css[$k].'"' : '').' width="'.$this->td_width[$k].'">'.$v.'</th>';
+      $str.= '    <th'.($arr_css[$k] ? ' class="'.$arr_css[$k].'"' : '').' width="'.$this->td_width[$k].'">'.$v.'</th>'.$this->_n;
     }
-    $str.= $this->_n;
-    $str.= '</tr>'.$this->_n;
+    $str.= '  </tr>'.$this->_n;
+    $str.= '</thead>'.$this->_n;
+    $str.= '<tbody>'.$this->_n;
     return $str;
   }
   /**
@@ -158,7 +159,7 @@ class table{
       $arr_op[] = $this->is_del ? '<a href="javascript:if(confirm(\'确认要删除吗？\'))document.location.href=\''.$this->_link_del($id).'\'">删除</a>':'';
       $arr_td[] = join('', $arr_op);
     }
-    $str = $this->tr_td($arr_td, $this->td_class);
+    $str = $this->tr_td($arr_td);
     $this->is_js = 1;
     return $str;
   }
@@ -171,15 +172,13 @@ class table{
    * @return string 表格的一行<tr>代码</tr>
    * @author owen 2008-6-12
    */
-  function tr_td($arr_td, $arr_class=array(), $arr_width=array(), $rowspan=0){
+  function tr_td($arr_td, $rowspan=0){
     if (empty($this->td_sum)){
       $this->_td_sum($arr_td);
     }
-    $arr_class = $arr_class ? $arr_class : $this->td_class;
-    $arr_width = $arr_width ? $arr_width : $this->td_width;
-    $str = '<tr class="tr_row">'.$this->_n;
+    $str = '<tr>'.$this->_n;
     foreach ((array)$arr_td as $k=>$v) {
-      $str.= '<td'.($arr_class[$k] ? ' class="'.$arr_class[$k].'"':'').($arr_width[$k] ? ' width="'.$arr_width[$k].'"':'');
+      $str.= '  <td';
       if($rowspan && count($arr_td) == $k+1){
         $str.= ' rowspan='.$rowspan;
       }
@@ -189,9 +188,6 @@ class table{
     }
     $str.= '</tr>'.$this->_n;
     return $str;
-  }
-  function tr_td_one($arr_td, $arr_class=array(), $arr_width=array(), $arr_span=array()){
-    return $this->tr_td($arr_td, $arr_class, $arr_width, $arr_span);
   }
   /**
    * 显示一个通行，此行只有一列
@@ -204,7 +200,7 @@ class table{
   function tr_one($td_str, $class='', $colspan=0) {
     if ($td_str) {
       $str = '<tr'.($class ? ' class="'.$class.'"' : '').'>'.$this->_n;
-      $str.= '<td colspan="'.($colspan ? $colspan : $this->td_sum).'">';
+      $str.= '  <td colspan="'.($colspan ? $colspan : $this->td_sum).'">';
       $str.= $td_str;
       $str.= '</td>'.$this->_n;
       $str.= '</tr>'.$this->_n;
@@ -221,6 +217,7 @@ class table{
   function tr_one_op($arr_op=array(), $link_add="", $link_str='') {
     $this->is_del ? $arr_op['del'] = '删除':'';
 
+    $str = "";
     if ($arr_op) {
       if($this->is_mutil_select){
         $str.= $this->f->label($this->f->checkbox(array(), array('全选')));
@@ -232,7 +229,6 @@ class table{
       $str.= str_repeat(' &nbsp; ', 5);
       $str.= $this->f->submit();
     }
-    $str.= $this->is_add ? '<a href="'.($link_add ? $link_add : $this->admin_page.'?a=add').'" class="op_add">添加记录</a>':'';
     return $str ? $this->tr_one($str, 'tr_one_op'):'';
   }
   /**
@@ -249,15 +245,7 @@ class table{
   }
   function print_js(){
     $str = '
-    			$(".t_table tr.tr_row").hover(function(){$(this).addClass("t_tr_over")}, function(){$(this).removeClass("t_tr_over")});
 
-          $(".t_table tr.tr_row", this).each(function(i){
-            var css = (i+1) % 2 == 0 ? "t_two" : "";
-            $(this).addClass(css);
-          });
-          $(".t_table tr.tr_row td a").click(
-            function(e){if (e){  e.stopPropagation();}else{window.event.cancelBubble = true;}}
-          );
           ';
 		return $str;
   }
@@ -333,52 +321,19 @@ class table{
           '.
           $this->print_js()
           .'
-          $(".t_table tr.tr_row").toggle(
-            function(){
-            	var input = $(this).parents("table").find("td input:first");
-            	var inputType = input.attr("type").toLowerCase();
-            	if(inputType == "checkbox"){
-              	$(this).addClass("t_tr_click");
-  						}else if(inputType == "radio"){
-  							$(this).parents("table").find("tr.tr_row").removeClass("t_tr_click");
-            		$(this).addClass("t_tr_click");
-  						}
-            	$(this).find("td input:first").attr("checked", true);
-  					},
-            function(){
-            	var input = $(this).parents("table").find("td input:first");
-            	var inputType = input.attr("type").toLowerCase();
-            	if(inputType == "checkbox"){
-	            	$(this).removeClass("t_tr_click");
-              	$(this).find("td input:first").attr("checked", false);
-  						}
-  					}
-          );
-          $(".t_table tr.tr_row td input[type=checkbox]").click(
-            function(e){if (e){  e.stopPropagation();}else{window.event.cancelBubble = true;}}
-          );
-          $(".t_table tr.tr_row td input[type=radio]").click(
-            function(e){
-            	if (e){e.stopPropagation();}else{window.event.cancelBubble = true;}
-          		$(this).parents("table").find("tr.tr_row").removeClass("t_tr_click");
-          		$(this).parents("tr.tr_row").addClass("t_tr_click");
-  					}
-          );
+            $(".table tr[class!=\'tr_one_op\'] td").find("a, input[type=checkbox], input[type=radio]").click(
+              function(e){if (e){  e.stopPropagation();}else{window.event.cancelBubble = true;}}
+            );
           ';
     if ($this->is_edit or $this->is_del or $this->is_select) {
       $str.= '
-          $(".t_table tr.tr_one_op td input[type=radio]").parent().dblclick(function(){$(this).children().attr("checked", "");});
-          //$(".t_table tr.tr_one_op td input[value^=del]").click(function(){if(!confirm("确认选择删除操作？")) {$(this).attr("checked", false);return false;}});
-          $(".t_table tr.tr_one_op td input[type=checkbox]").click(
-            function(){
-              if($(this).is(":checked")){
-                $(this).parents("table").find("input[name=\'items[]\']").each(function(){$(this).attr("checked", true);});
-              }else{
-                $(this).parents("table").find("input[name^=\'items[]\']").each(function(){$(this).attr("checked", false);});
-              }
-            }
-          );
-          $("input[type=\'submit\']").addClass("btxp");
+        $(".table tr.tr_one_op td input[type=radio]").parent().dblclick(function(){$(this).children().attr("checked", false);});
+        $(".table tr.tr_one_op td input[type=checkbox]").click(
+          function(){
+            var bool = this.checked;
+            $(this).parents("table").find("input[name=\'items[]\']").each(function(){this.checked = bool});
+          }
+        );
       ';
     }
     $str.= '

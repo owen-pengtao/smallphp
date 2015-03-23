@@ -1,7 +1,36 @@
-#spLoginForm {
-  width: 550px;
+html,
+body {
   height: 100%;
+  background: #ececec;
 }
-#spLoginForm .login-panel {
-  margin: 25% auto 40px;
+body {
+  position: relative;
+}
+#sp-loginForm {
+  height: 310px;
+  left: 50%;
+  margin-left: -275px;
+  margin-top: -155px;
+  position: absolute;
+  top: 50%;
+  min-width: 550px;
+}
+#page-wrapper.sp-page-wrapper {
+  padding-top: 20px;
+}
+#page-wrapper.sp-page-wrapper .sp-form-search {
+  margin-bottom: 15px;
+}
+#page-wrapper.sp-page-wrapper .sp-form-search input[placeholder] {
+  width: 300px;
+  margin: 0 10px;
+}
+#page-wrapper.sp-page-wrapper .table {
+  margin: 0;
+}
+#page-wrapper.sp-page-wrapper .table .tr_one_op td label input {
+  margin-right: 5px;
+}
+#page-wrapper.sp-page-wrapper .pagination {
+  margin: 10px 0;
 }

@@ -2,14 +2,9 @@
 class model{
   function __construct(){
     $this->t_db_error         = 'db_error';
-    $this->t_address          = T.'address';
-    $this->t_address_modify   = T.'address_modify';
-    $this->t_address_custom   = T.'address_custom';
-    $this->t_address_categories   = T.'address_categories';
     $this->t_admins           = T.'admins';
     $this->t_cache            = T.'cache';
-    $this->t_feedbacks        = T.'feedbacks';
-    $this->t_helps            = T.'helps';
+    $this->t_users            = T.'users';
     $this->_init_param();
   }
   function _init_param(){

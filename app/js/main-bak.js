@@ -42,6 +42,31 @@ angular.module('spApp', ["spApp.controllers"], function($httpProvider){
   $httpProvider.defaults.transformRequest = [function(data) {
     return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
   }];
+})
+.factory("commonService", ["$location", function($location){
+  return {
+    getUrlParameter : function(key){
+      var value = "", params = $location.url() ? $location.url().split("/")[1].split("&") : [];
+      angular.forEach(params, function (v) {
+        if (v.split("=")[0] === key) {
+          value = v.split("=")[1];
+          return;
+        }
+      });
+      return value;
+    }
+  };
+}])
+.config(function ($routeProvider) {
+  return $routeProvider
+    .when("/", {
+      controller: 'userController'
+    }).when("/add", {
+      controller: 'userController'
+    }).otherwise({
+      redirectTo: '/'
+    });
+}).run(function ($route) {
 });
 angular.module("spApp.controllers", [])
   .controller('userController', ['$scope', '$http', '$routeParams', 'commonService', function($scope, $http, $routeParams, commonService){

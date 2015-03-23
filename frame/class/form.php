@@ -5,18 +5,8 @@
  * @license http://www.d5s.cn/ 无影的博客
  */
 class form{
-  /**
-   * 是否启用js检测 true启用
-   * @var public boolean
-   */
-  public $is_validate;
   public $tab_i;
 
-  /**
-   * 是否已经载入js文件 true已经载入过了
-   * @var private boolean
-   */
-  private $is_include_js;
   /**
    * JS验证方法
    * @var private array
@@ -30,25 +20,6 @@ class form{
     $this->is_include_js= 0;
     $this->_n  = "\r\n";
     $this->tab_i = 1;
-  }
-  /**
-   * 载入js检测文件
-   * 载入后，把$this->is_include_js 置 1
-   * @return void()
-   * @author owen 2008-6-12
-   */
-  function get_js_validate() {
-    $arr = array();
-    if ($this->is_validate AND $this->is_include_js==0) {
-      $js = array(
-            'jquery.validate.js',
-          );
-      foreach ((array)$js as $v) {
-        $arr[] = '<script type="text/javascript" src="'.SITE_URL.'bower_components/jquery-validation/dist/'.$v.'" charset="utf-8"></script>'.$this->_n;
-      }
-      $this->is_include_js = 1;
-    }
-    return join('', $arr);
   }
   /**
    * 获取JS检测的验证字符串
@@ -311,7 +282,7 @@ class form{
    * @author owen 2008-6-12
    */
   function submit($arr_type=array(), $value='提交') {
-    $arr_type[3] = $arr_type[3] ? $arr_type[3] : 'btxp';
+    $arr_type[3] = $arr_type[3] ? $arr_type[3] : 'btn btn-success btn-xs';
     $str = $this->_input($arr_type, 'submit');
     $str.= ' value="'.$value.'"'.$this->__input();
     return $str;
@@ -396,18 +367,7 @@ class form{
     $arr_target = array('_blank', '_parent', '_self', '_top');
     $f_class = $class_id[0] ? $class_id[0] : 'f_form';
     $f_id = $class_id[1] ? ' id="'.$class_id[1].'"' : '';
-    $str = $this->get_js_validate();
-    if ($this->is_validate) {
-      $str.= '
-          <script type="text/javascript">
-          <!--
-            $(document).ready(function() {
-              $(".'.$f_class.'").validate();
-            });
-          //-->
-          </script>
-          ';
-    }
+    $str = "";
     $str.= '<form class="'.$f_class.'"'.$f_id.' action="'.$action.'" method="'.$method.'" enctype="'.($method=='post' ? 'multipart/form-data':'application/x-www-form-urlencoded').'"'.(in_array($target, $arr_target)?' target="'.$target.'" ':'').$str_tmp.'>'.$this->_n;
     return $str;
   }

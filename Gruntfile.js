@@ -30,7 +30,7 @@ module.exports = function (grunt) {
         options: {
           livereload: true
         },
-        files: ['<%= config.app %>/**/*.js', '<%= config.app %>/**/*.html', '<%= config.app %>/**/*.php']
+        files: ['<%= config.app %>/**/*.js', '<%= config.app %>/**/*.html', 'root/**/*.php']
       },
       less: {
         tasks: ['less:development'],

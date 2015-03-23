@@ -4,5 +4,6 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="local.d5s.cn.smallphp node_modules" level="project" />
   </component>
 </module>

@@ -18,7 +18,7 @@ include('controller.php');
 </head>
 <body>
 <div id="wrapper">
-<div id="spLoginForm" class="container-fluid">
+<div id="sp-loginForm" class="container-fluid">
     <div class="login-panel panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">登录后台管理</h3>
