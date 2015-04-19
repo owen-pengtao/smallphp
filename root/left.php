@@ -60,6 +60,7 @@
           <a href="#"><i class="fa fa-files-o fa-fw"></i> 其他<span class="fa arrow"></span></a>
           <ul class="nav nav-second-level collapse in">
             <li><a href="index.php?">接口列表</a></li>
+            <li><a href="form-example.php">Form 例子</a></li>
             <li><a href="dberror.php">数据库错误</a></li>
             <li><a href="phpinfo.php">phpinfo()</a></li>
             <li><a href="http://localhost/phpmyadmin/" target="_target">phpMyadmin</a></li>

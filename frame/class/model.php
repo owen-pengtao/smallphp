@@ -29,7 +29,7 @@ class model{
            list($field, $value) = explode('-', $item_op);
            $row[$field] = $value;
         }
-        if (!empty($row)){
+        if ($row){
           $this->db->row_update($this->tab, $row, $where);
         }
       }

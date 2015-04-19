@@ -265,18 +265,21 @@ class db {
   }
   function sql_insert($tab, $row){
     $row = addslashes_str($row);
+    $str_filed = "";
+    $str_value = "";
     foreach ($row as $key=>$value) {
-      $sqlfield .= $key.",";
-      $sqlvalue .= "'".$value."',";
+      $str_filed .= $key.",";
+      $str_value .= "'".$value."',";
     }
-    return "INSERT INTO `".$tab."`(".substr($sqlfield, 0, -1).") VALUES (".substr($sqlvalue, 0, -1).")";
+    return "INSERT INTO `".$tab."`(".substr($str_filed, 0, -1).") VALUES (".substr($str_value, 0, -1).")";
   }
   function sql_update($tab, $row, $where){
     $row = addslashes_str($row);
+    $str = "";
     foreach ($row as $key=>$value) {
-      $sqlud .= $key."= '".$value."',";
+      $str .= $key."= '".$value."',";
     }
-    return "UPDATE `".$tab."` SET ".substr($sqlud, 0, -1)." WHERE ".$where;
+    return "UPDATE `".$tab."` SET ".substr($str, 0, -1)." WHERE ".$where;
   }
   function sql_delete($tab, $where){
     return "DELETE FROM `".$tab."` WHERE ".$where;

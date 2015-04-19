@@ -34,7 +34,7 @@ class root_loginController{
     $username = $this->_validate_login($username);
     $row = $this->login->getAdminByUsernameAndPassword($username, $password);
 
-    if ($row['grade']==9) {
+    if ($row && $row['grade']==9) {
       $bool = true;
       $_SESSION['is_root']= 1;
       $this->login->log_login($username);

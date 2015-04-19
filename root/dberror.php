@@ -28,11 +28,10 @@
   $t->set_op(0, 0);
 
   $td_width  = array('8%', '46%', '15%', '15%');
-  $td_class  = array('', 't_td_left', '', '');
   $tr_th    = array('ID', '错误信息', '页面文件', '时间');
-  $t->set_table($td_width, $td_class, $tr_th);
+  $t->set_table($td_width, $tr_th);
 
-  $str = $t->table_start();
+  $str = $t->table_start(array("table-hover"));
   $str.= $t->caption('所有数据库错误管理');
   $str.= $t->tr_th();
 
@@ -49,4 +48,7 @@
   $str.= $t->table_end();
   echo $str;
 ?>
+  <div class="row text-center sp-pagination">
+    <?php echo $tpl->page_list['page'];?>
+  </div>
 <?php include('end.php');?>

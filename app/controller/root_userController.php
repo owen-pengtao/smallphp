@@ -24,7 +24,8 @@ class root_userController{
     $is_disable = intval($_POST['is_disable']);
 
     $row = array(
-          'username' => $username,
+          'username'   => $username,
+          'email'      => $email,
           'is_disable' => $is_disable,
         );
     if($password){
