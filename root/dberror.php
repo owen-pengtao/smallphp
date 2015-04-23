@@ -2,29 +2,32 @@
   include('global.php');
 ?>
 <?php include('head.php');?>
+  <div class="row">
+    <form class="sp-form-search form-inline text-center" action="?a=index" method="get" enctype="application/x-www-form-urlencoded">
+      <?php
+      $f = new formB();
+      $f->setRequireList(array("search_key"));
+      $f->addSelect("search_type", "", $_GET['search_type'], array(
+        "error_str" => "错误信息",
+        "id"        => "ID"
+      ));
+      $f->addInput("text", "search_key", $_GET['search_key'], "", ' placeholder="请输入搜索关键词"');
+      $f->addSelect("by", "", $_GET['by'], array(
+        'id'        => '默认排序',
+        'page_name' => '页面文件'
+      ));
+      $f->addSelect("order", "", "", array(
+        "DESC" => "降序↓",
+        "ASC"  => "升序↑"
+      ));
+      $f->addHidden("a", "index");
+      $f->addSingleInput("submit", "Search", 'class="btn btn-success"');
+      $f->render();
+      ?>
+    </form>
+  </div>
 <?php
   $t = new table();
-  $str = $t->table_start();
-    $f = new form();
-    $str_f = $f->form_start('?a=index', array(), 'get');
-    $arr_s = array('error_str' => '错误信息', 'id' => 'ID');
-    $str_f.= $f->select(array('search_type'), $arr_s, $_GET['search_type']);
-
-    $str_f.= $f->text(array('search_key', 'required', '请输入搜索关键词', 't_text2'), array($_GET['search_key']));
-
-    $arr_s = array('id' => '默认排序', 'page_name' => '页面文件');
-    $str_f.= $f->select(array('by'), $arr_s, $_GET['by']);
-
-    $arr_s = array('DESC' => '降序↓', 'ASC' => '升序↑');
-    $str_f.= $f->select(array('order'), $arr_s, $_GET['order']);
-
-    $str_f.= $f->submit();
-    $str_f.= $f->form_end();
-  $str.= $t->tr_one($str_f, 'tr_one');
-  $str.= $t->table_end();
-  echo $str;
-  unset($f, $str_f, $str);
-
   $t->set_op(0, 0);
 
   $td_width  = array('8%', '46%', '15%', '15%');

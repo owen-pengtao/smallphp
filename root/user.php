@@ -58,7 +58,7 @@ if ($action=='add' OR $action=='edit') {
         "username" => "用户名",
         "email"    => "邮箱"
       ));
-      $f->addInput("text", "search_key", $tpl->row['username'], "", ' placeholder="请输入搜索关键词"');
+      $f->addInput("text", "search_key", $_GET['search_key'], "", ' placeholder="请输入搜索关键词"');
       $f->addSelect("order", "", "", array(
         "DESC" => "降序↓",
         "ASC"  => "升序↑"
