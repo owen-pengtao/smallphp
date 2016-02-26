@@ -1,5 +1,6 @@
 <?php
   //error_reporting(0);
+  error_reporting(E_ALL ^ E_NOTICE);
   session_start();
   define('DEBUG', false);
   define('DS', DIRECTORY_SEPARATOR);
